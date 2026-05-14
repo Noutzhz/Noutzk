@@ -1,12 +1,1440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=https://seastudios.vercel.app/">
-<title>Redirecionando...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¥UNG $CUD€RI Ø$</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --green: #00ff41;
+            --green-dim: #00aa2b;
+            --green-glow: rgba(0,255,65,0.4);
+            --red: #ff2020;
+            --amber: #ffb000;
+            --dark: #000000;
+            --win-header: linear-gradient(180deg, #1757d4 0%, #0a3ab8 4%, #0a3ab8 95%, #0525a8 100%);
+            --win-bg: #ece9d8;
+            --win-border: #0055ea;
+            --crt-bg: #001a00;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpolygon points='0,0 0,14 4,10 7,16 9,15 6,9 12,9' fill='%2300ff41' stroke='black' stroke-width='1'/%3E%3C/svg%3E") 0 0, auto;
+        }
+
+        /* ═══════════════════════════════════════
+           CRT MONITOR OUTER SHELL
+        ═══════════════════════════════════════ */
+        #monitor-outer {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(ellipse at 50% 50%, #111 60%, #000 100%);
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Thick CRT bezel */
+        #crt-bezel {
+            position: fixed;
+            inset: 0;
+            border: 28px solid #1a1a1a;
+            border-radius: 18px;
+            box-shadow:
+                inset 0 0 0 3px #333,
+                inset 0 0 0 6px #111,
+                0 0 60px rgba(0,255,65,0.08),
+                0 0 120px rgba(0,0,0,0.9);
+            pointer-events: none;
+            z-index: 9990;
+        }
+
+        /* Screen curve vignette */
+        #crt-vignette {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.85) 100%);
+            pointer-events: none;
+            z-index: 9980;
+            border-radius: 10px;
+        }
+
+        /* Scanlines */
+        #crt-scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.18) 2px,
+                rgba(0, 0, 0, 0.18) 4px
+            );
+            pointer-events: none;
+            z-index: 9970;
+            animation: scanroll 8s linear infinite;
+        }
+
+        @keyframes scanroll {
+            from { background-position: 0 0; }
+            to   { background-position: 0 100px; }
+        }
+
+        /* Phosphor RGB sub-pixel shimmer */
+        #crt-rgb {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                rgba(255,0,0,0.015) 0px,
+                rgba(0,255,0,0.015) 1px,
+                rgba(0,0,255,0.015) 2px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 9975;
+        }
+
+        /* Screen flicker */
+        #crt-flicker {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9960;
+            animation: flicker 0.08s infinite;
+        }
+
+        @keyframes flicker {
+            0%   { opacity: 1; }
+            92%  { opacity: 1; }
+            93%  { opacity: 0.97; }
+            94%  { opacity: 1; }
+            97%  { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+
+        /* Horizontal glitch line */
+        #crt-glitch {
+            position: fixed;
+            left: 0; right: 0;
+            height: 2px;
+            background: rgba(0,255,65,0.15);
+            pointer-events: none;
+            z-index: 9965;
+            animation: glitch-scan 6s linear infinite;
+        }
+
+        @keyframes glitch-scan {
+            0%   { top: -5px; opacity: 0; }
+            5%   { opacity: 1; }
+            95%  { opacity: 0.5; }
+            100% { top: 100vh; opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════
+           DESKTOP
+        ═══════════════════════════════════════ */
+        #desktop {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 20px 20px 45px;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(0,60,0,0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,40,0,0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #001200 0%, #000800 40%, #001500 100%);
+        }
+
+        /* Matrix rain canvas behind everything */
+        #matrix-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.07;
+            z-index: 0;
+        }
+
+        /* Desktop grid overlay */
+        #desktop::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,65,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ═══════════════════════════════════════
+           ICONS
+        ═══════════════════════════════════════ */
+        .icon {
+            position: relative;
+            z-index: 5;
+            width: 80px;
+            text-align: center;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 22px;
+            font-family: 'Tahoma', sans-serif;
+            font-size: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px #000, 0 0 8px rgba(0,0,0,0.9);
+            user-select: none;
+            filter: drop-shadow(0 0 2px rgba(0,255,65,0.2));
+            transition: filter 0.2s;
+        }
+
+        .icon:hover {
+            filter: drop-shadow(0 0 12px var(--green-glow));
+        }
+
+        .icon:hover .icon-label {
+            background: var(--win-border);
+            color: white;
+        }
+
+        .icon:active img { transform: scale(0.9); }
+
+        .icon img {
+            width: 42px;
+            height: 42px;
+            display: block;
+            margin: 0 auto 4px;
+            transition: 0.15s;
+            filter: hue-rotate(100deg) saturate(2) brightness(0.9) drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+        }
+
+        .icon:hover img {
+            filter: hue-rotate(100deg) saturate(3) brightness(1.2) drop-shadow(0 0 8px var(--green));
+        }
+
+        .icon-label {
+            padding: 1px 3px;
+            border-radius: 1px;
+        }
+
+        /* ═══════════════════════════════════════
+           WINDOWS
+        ═══════════════════════════════════════ */
+        .window {
+            position: absolute;
+            min-width: 380px;
+            background: var(--win-bg);
+            border: 1px solid #848484;
+            box-shadow:
+                2px 2px 0 rgba(255,255,255,0.9) inset,
+                -2px -2px 0 rgba(0,0,0,0.3) inset,
+                4px 4px 20px rgba(0,0,0,0.8),
+                0 0 0 1px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 10;
+            border-radius: 8px 8px 0 0;
+            font-family: 'Tahoma', 'Arial', sans-serif;
+        }
+
+        .window-header {
+            background: var(--win-header);
+            color: white;
+            padding: 5px 6px 5px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-family: 'Tahoma', sans-serif;
+            font-weight: bold;
+            border-radius: 7px 7px 0 0;
+            gap: 6px;
+        }
+
+        .window-title-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .window-icon-sm {
+            width: 16px;
+            height: 16px;
+            filter: hue-rotate(100deg) saturate(2) brightness(1.5);
+        }
+
+        .win-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .win-btn {
+            width: 22px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 3px;
+            transition: 0.1s;
+            color: white;
+            font-family: 'Marlett', 'Webdings', sans-serif;
+        }
+
+        .win-btn-min  { background: linear-gradient(180deg, #4a90d9, #2060b8); }
+        .win-btn-max  { background: linear-gradient(180deg, #4a90d9, #2060b8); }
+        .win-btn-close {
+            background: linear-gradient(180deg, #e04040, #b82020);
+        }
+        .win-btn:hover { filter: brightness(1.3); }
+        .win-btn:active { filter: brightness(0.8); }
+
+        /* Address bar */
+        .win-address {
+            background: #f0f0f0;
+            border-bottom: 1px solid #848484;
+            padding: 3px 8px;
+            font-size: 11px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .win-address-bar {
+            flex: 1;
+            background: white;
+            border: 1px solid #7b9ebd;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-family: 'Tahoma';
+            color: #000;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.2) inset;
+        }
+
+        .window-content {
+            padding: 14px;
+            background: var(--crt-bg);
+            color: var(--green);
+            max-height: 320px;
+            overflow-y: auto;
+            font-family: 'VT323', 'Share Tech Mono', 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            border: 2px solid #333;
+            border-top: none;
+            border-radius: 0 0 0 0;
+            position: relative;
+        }
+
+        /* Scanlines inside windows */
+        .window-content::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0,0,0,0.1) 3px,
+                rgba(0,0,0,0.1) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .window-content > * { position: relative; z-index: 2; }
+
+        .window-content::-webkit-scrollbar { width: 14px; }
+        .window-content::-webkit-scrollbar-track { background: #1a1a1a; border: 1px solid #333; }
+        .window-content::-webkit-scrollbar-thumb { background: linear-gradient(#333, #222); border: 1px solid #444; }
+
+        .window-content a {
+            color: var(--green);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--green-dim);
+            transition: 0.2s;
+        }
+
+        .window-content a:hover {
+            background: var(--green);
+            color: #000;
+            border-bottom-color: transparent;
+            padding: 0 2px;
+        }
+
+        /* ═══════════════════════════════════════
+           TASKBAR
+        ═══════════════════════════════════════ */
+        #taskbar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 38px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 3px, #0d0d0d 100%);
+            border-top: 1px solid #444;
+            display: flex;
+            align-items: center;
+            z-index: 9900;
+            box-shadow: 0 -2px 10px rgba(0,255,65,0.05);
+        }
+
+        #start-button {
+            height: 30px;
+            margin: 0 4px;
+            padding: 0 14px 0 10px;
+            background: linear-gradient(180deg, #3a8a3a 0%, #1a5a1a 100%);
+            color: white;
+            font-family: 'Tahoma', sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #5aaa5a;
+            border-radius: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 0 8px rgba(0,255,65,0.3);
+            transition: 0.2s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        }
+
+        #start-button:hover {
+            background: linear-gradient(180deg, #4aaa4a, #2a7a2a);
+            box-shadow: 0 0 15px rgba(0,255,65,0.5);
+        }
+
+        #start-button img {
+            width: 18px;
+            height: 18px;
+        }
+
+        .taskbar-divider {
+            width: 1px;
+            height: 28px;
+            background: linear-gradient(transparent, #444, transparent);
+            margin: 0 4px;
+        }
+
+        .taskbar-tasks {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 0 4px;
+            overflow: hidden;
+        }
+
+        .taskbar-item {
+            height: 26px;
+            padding: 0 10px;
+            background: linear-gradient(180deg, #333, #1a1a1a);
+            border: 1px solid #555;
+            color: var(--green);
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 100px;
+            border-radius: 3px;
+            transition: 0.15s;
+        }
+
+        .taskbar-item:hover {
+            background: linear-gradient(180deg, #444, #2a2a2a);
+            box-shadow: 0 0 8px rgba(0,255,65,0.2);
+        }
+
+        .taskbar-item.active {
+            background: linear-gradient(180deg, #1a1a1a, #111);
+            border-color: var(--green-dim);
+            box-shadow: 0 0 6px rgba(0,255,65,0.3) inset;
+        }
+
+        /* System tray */
+        #systray {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 10px;
+            border-left: 1px solid #333;
+            height: 100%;
+        }
+
+        .tray-icon {
+            width: 16px;
+            height: 16px;
+            filter: hue-rotate(100deg) saturate(3) brightness(1.5);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tray-icon:hover { filter: brightness(2); }
+
+        #clock-display {
+            color: var(--green);
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            text-align: right;
+            text-shadow: 0 0 6px var(--green-glow);
+            min-width: 50px;
+        }
+
+        #date-display {
+            color: var(--green-dim);
+            font-family: 'VT323', monospace;
+            font-size: 12px;
+            text-align: right;
+        }
+
+        /* ═══════════════════════════════════════
+           CONTENT STYLES
+        ═══════════════════════════════════════ */
+        .social-link {
+            display: block;
+            color: var(--green);
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 10px 14px;
+            border: 1px solid var(--green-dim);
+            background: rgba(0,255,65,0.03);
+            font-size: 16px;
+            transition: 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0; bottom: 0;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.1), transparent);
+            transition: 0.4s;
+        }
+
+        .social-link:hover::before { left: 100%; }
+
+        .social-link:hover {
+            background: var(--green);
+            color: #000 !important;
+            border-color: var(--green);
+            box-shadow: 0 0 20px var(--green-glow);
+            padding-left: 20px;
+        }
+
+        .prompt::before { content: 'C:\\HACK> '; color: var(--amber); }
+
+        .prompt-green::before { content: 'root@hack:~# '; color: var(--green); }
+
+        .blinking-cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 10px; padding-left: 4px; }
+        li::before { content: '├─ '; color: var(--green-dim); }
+        li:last-child::before { content: '└─ '; color: var(--green-dim); }
+
+        hr { border: none; border-top: 1px solid var(--green-dim); margin: 10px 0; opacity: 0.4; }
+
+        .glitch-text {
+            position: relative;
+            color: var(--green);
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .glitch-text::before {
+            color: var(--red);
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch1 3s infinite;
+            opacity: 0;
+        }
+
+        .glitch-text::after {
+            color: #0ff;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            animation: glitch2 3s infinite;
+            opacity: 0;
+        }
+
+        @keyframes glitch1 {
+            0%, 90%, 100% { opacity: 0; transform: none; }
+            92% { opacity: 0.8; transform: translate(-2px, 0); }
+            94% { opacity: 0.8; transform: translate(2px, 0); }
+        }
+
+        @keyframes glitch2 {
+            0%, 90%, 100% { opacity: 0; transform: none; }
+            91% { opacity: 0.8; transform: translate(2px, 1px); }
+            93% { opacity: 0.8; transform: translate(-2px, -1px); }
+        }
+
+        /* Boot screen */
+        #boot-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'VT323', monospace;
+            color: var(--green);
+            font-size: 18px;
+            transition: opacity 1s;
+        }
+
+        #boot-screen.fadeout { opacity: 0; pointer-events: none; }
+
+        .boot-line {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+            margin: 2px 0;
+        }
+
+        .boot-line.visible { opacity: 1; transform: translateX(0); }
+
+        #boot-bar-container {
+            width: 400px;
+            margin-top: 20px;
+            border: 1px solid var(--green-dim);
+            height: 18px;
+            background: #001200;
+        }
+
+        #boot-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #004400, var(--green));
+            width: 0%;
+            transition: width 0.1s;
+            box-shadow: 0 0 10px var(--green);
+        }
+
+        .warn-text { color: var(--amber); }
+        .err-text  { color: var(--red); }
+        .ok-text   { color: var(--green); }
+
+        /* XP-style window menu bar */
+        .win-menubar {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            display: flex;
+            gap: 2px;
+            font-size: 11px;
+            font-family: 'Tahoma';
+            border-bottom: 1px solid #ccc;
+        }
+
+        .win-menubar span {
+            padding: 2px 6px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .win-menubar span:hover {
+            background: #316ac5;
+            color: white;
+        }
+
+        /* Status bar */
+        .win-statusbar {
+            background: #f5f5f5;
+            border-top: 1px solid #ccc;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-family: 'Tahoma';
+            color: #555;
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-item {
+            border-right: 1px solid #ccc;
+            padding-right: 10px;
+        }
+
+        /* Resize handle */
+        .win-resize {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 16px; height: 16px;
+            cursor: se-resize;
+            opacity: 0.5;
+        }
+
+        /* Desktop HUD elements */
+        .hud-element {
+            position: absolute;
+            z-index: 3;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: rgba(0,255,65,0.25);
+            pointer-events: none;
+            line-height: 1.8;
+        }
+
+        #hud-tl { top: 20px; left: 20px; }
+        #hud-tr { top: 20px; right: 20px; text-align: right; }
+        #hud-br { bottom: 50px; right: 20px; text-align: right; }
+
+        /* Start menu */
+        #start-menu {
+            position: fixed;
+            bottom: 38px;
+            left: 4px;
+            width: 300px;
+            background: #0d0d0d;
+            border: 1px solid var(--green-dim);
+            box-shadow: 4px -4px 20px rgba(0,255,65,0.15);
+            display: none;
+            z-index: 9950;
+            font-family: 'VT323', monospace;
+        }
+
+        #start-menu.open { display: block; }
+
+        .start-header {
+            background: linear-gradient(90deg, #003300, #001a00);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--green-dim);
+        }
+
+        .start-avatar {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--green-dim);
+            border-radius: 50%;
+            background: linear-gradient(135deg, #002200, #004400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--green);
+        }
+
+        .start-username {
+            color: var(--green);
+            font-size: 18px;
+        }
+
+        .start-items {
+            padding: 6px 0;
+        }
+
+        .start-item {
+            padding: 8px 16px;
+            color: var(--green);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.15s;
+        }
+
+        .start-item:hover {
+            background: rgba(0,255,65,0.1);
+            padding-left: 22px;
+        }
+
+        .start-item img {
+            width: 24px; height: 24px;
+            filter: hue-rotate(100deg) saturate(3) brightness(1.5);
+        }
+
+        .start-sep {
+            border: none;
+            border-top: 1px solid rgba(0,255,65,0.2);
+            margin: 4px 0;
+        }
+
+        .start-footer {
+            background: rgba(0,255,65,0.05);
+            padding: 6px 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid rgba(0,255,65,0.2);
+        }
+
+        .start-footer-btn {
+            color: var(--green-dim);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+
+        .start-footer-btn:hover { color: var(--green); }
+    </style>
 </head>
 <body>
-<!-- Se o navegador não redirecionar automaticamente, use este link: -->
-<a href="https://seastudios.vercel.app/Noutz.html#header05-a">Clique aqui para ser redirecionado</a>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+    <div style="font-size:14px; color:#333; margin-bottom:30px; letter-spacing:4px;">BIOS v2.6.31 — HACK_OS EDITION</div>
+    <div id="boot-log" style="width:500px; text-align:left;">
+        <!-- filled by JS -->
+    </div>
+    <div id="boot-bar-container" style="display:none;">
+        <div id="boot-bar"></div>
+    </div>
+    <div id="boot-status" style="margin-top:8px; font-size:14px; color:#555;"></div>
+</div>
+
+<!-- CRT EFFECTS LAYERS -->
+<div id="crt-bezel"></div>
+<div id="crt-vignette"></div>
+<div id="crt-scanlines"></div>
+<div id="crt-rgb"></div>
+<div id="crt-flicker"></div>
+<div id="crt-glitch"></div>
+
+<!-- MATRIX BG -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- DESKTOP -->
+<div id="desktop">
+
+    <!-- HUD overlays -->
+    <div class="hud-element" id="hud-tl">
+        SYS_VERSION: HACK_XP_SP2<br>
+        KERNEL: 5.15.0-hck<br>
+        USER: root<br>
+        <span id="hud-uptime">UPTIME: 00:00:00</span>
+    </div>
+    <div class="hud-element" id="hud-tr">
+        CPU: ████░ 72%<br>
+        MEM: ██░░░ 41%<br>
+        NET: ↑ 1.2MB ↓ 3.4MB<br>
+        FIREWALL: <span style="color:rgba(255,176,0,0.4)">BYPASSED</span>
+    </div>
+    <div class="hud-element" id="hud-br">
+        <span id="hud-date"></span><br>
+        SIGNAL: ▲▲▲▲░<br>
+        ENCRYPT: AES-256
+    </div>
+
+    <!-- ICONS -->
+    <div class="icon" onclick="openWindow('win-albums')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3312/3312678.png" alt="albums">
+        <div><span class="icon-label">ALBUMS.exe</span></div>
+    </div>
+
+    <div class="icon" onclick="openWindow('win-social')">
+        <img src="https://cdn-icons-png.flaticon.com/512/625/625154.png" alt="links">
+        <div><span class="icon-label">LINKS.url</span></div>
+    </div>
+
+    <div class="icon" onclick="openWindow('win-beats')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3039/3039401.png" alt="beats">
+        <div><span class="icon-label">BEATS.bat</span></div>
+    </div>
+
+    <div class="icon" onclick="openWindow('win-contact')">
+        <img src="https://cdn-icons-png.flaticon.com/512/542/542638.png" alt="contact">
+        <div><span class="icon-label">CONTACT.txt</span></div>
+    </div>
+
+    <div class="icon" onclick="openWindow('win-terminal')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1684/1684375.png" alt="terminal">
+        <div><span class="icon-label">CMD.exe</span></div>
+    </div>
+
+    <!-- ═══════════════ ALBUMS WINDOW ═══════════════ -->
+    <div id="win-albums" class="window" style="left:120px; top:40px;">
+        <div class="window-header" onmousedown="dragWindow(event, 'win-albums')">
+            <div class="window-title-area">
+                <img class="window-icon-sm" src="https://cdn-icons-png.flaticon.com/512/3312/3312678.png">
+                <span>DATABASE_ALBUMS.sys — [root@hack]</span>
+            </div>
+            <div class="win-controls">
+                <div class="win-btn win-btn-min"  onclick="closeWindow('win-albums')">─</div>
+                <div class="win-btn win-btn-max">□</div>
+                <div class="win-btn win-btn-close" onclick="closeWindow('win-albums')">✕</div>
+            </div>
+        </div>
+        <div class="win-menubar">
+            <span>File</span><span>Edit</span><span>View</span><span>Help</span>
+        </div>
+        <div class="win-address">
+            <span style="font-size:10px;">Address</span>
+            <input class="win-address-bar" value="hack://local/discography" readonly>
+        </div>
+        <div class="window-content">
+            <p class="prompt">LISTING DISCOGRAPHY<span class="blinking-cursor"></span></p>
+            <p style="color:var(--green-dim); font-size:13px; margin: 6px 0;">C:\HACK\MUSIC\ALBUMS\ — 3 items found</p>
+            <hr>
+            <ul>
+                <li><a href="YOUR_SPOTIFY_ALBUM_LINK_1" target="_blank" class="glitch-text" data-text="LUCK OR DICE">LUCK OR DICE</a> <span style="color:var(--green-dim);font-size:13px;">[RELEASED]</span></li>
+                <li><a href="YOUR_SPOTIFY_ALBUM_LINK_2" target="_blank" class="glitch-text" data-text="HOOD FOOTAGE">HOOD FOOTAGE</a> <span style="color:var(--green-dim);font-size:13px;">[RELEASED]</span></li>
+                <li style="color:var(--amber);">LUCK OR DICE II <span style="font-size:13px; animation: blink 1s step-end infinite; display:inline-block;">[ENCRYPTING...]</span></li>
+            </ul>
+        </div>
+        <div class="win-statusbar">
+            <span class="status-item">3 objects</span>
+            <span class="status-item">ACCESS: GRANTED</span>
+            <span>SECTOR: MUSIC</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ SOCIAL WINDOW ═══════════════ -->
+    <div id="win-social" class="window" style="left:200px; top:80px;">
+        <div class="window-header" onmousedown="dragWindow(event, 'win-social')">
+            <div class="window-title-area">
+                <img class="window-icon-sm" src="https://cdn-icons-png.flaticon.com/512/625/625154.png">
+                <span>SOCIAL_OS_GATEWAY.dll</span>
+            </div>
+            <div class="win-controls">
+                <div class="win-btn win-btn-min">─</div>
+                <div class="win-btn win-btn-max">□</div>
+                <div class="win-btn win-btn-close" onclick="closeWindow('win-social')">✕</div>
+            </div>
+        </div>
+        <div class="win-menubar">
+            <span>File</span><span>Tools</span><span>Help</span>
+        </div>
+        <div class="window-content">
+            <p class="prompt-green">ESTABLISHING CONNECTIONS<span class="blinking-cursor"></span></p>
+            <br>
+            <a href="https://open.spotify.com/artist/YOUR_ID" target="_blank" class="social-link">▶ SPOTIFY_ACCESS.exe</a>
+            <a href="https://www.youtube.com/@Noutzk" target="_blank" class="social-link">▶ YOUTUBE_CHANNEL.url</a>
+            <a href="https://www.instagram.com/noutzk" target="_blank" class="social-link">▶ INSTAGRAM_FEED.php</a>
+            <a href="https://soundcloud.com/noutzk" target="_blank" class="social-link">▶ SOUNDCLOUD_WAVES.bat</a>
+            <br>
+            <p style="color:var(--green-dim); font-size:13px;">// All links open in secure tunnel</p>
+        </div>
+        <div class="win-statusbar">
+            <span class="status-item">4 connections</span>
+            <span>TLS 1.3 ACTIVE</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ BEATS WINDOW ═══════════════ -->
+    <div id="win-beats" class="window" style="left:160px; top:120px; min-width:340px;">
+        <div class="window-header" onmousedown="dragWindow(event, 'win-beats')">
+            <div class="window-title-area">
+                <img class="window-icon-sm" src="https://cdn-icons-png.flaticon.com/512/3039/3039401.png">
+                <span>EXEC_BEAT_PLAYLIST.bat</span>
+            </div>
+            <div class="win-controls">
+                <div class="win-btn win-btn-min">─</div>
+                <div class="win-btn win-btn-max">□</div>
+                <div class="win-btn win-btn-close" onclick="closeWindow('win-beats')">✕</div>
+            </div>
+        </div>
+        <div class="window-content" style="text-align:center; padding: 20px;">
+            <p class="prompt" style="text-align:left;">LOADING BEAT_DATABASE...</p>
+            <br>
+            <div style="border: 1px solid var(--green-dim); padding: 16px; margin: 10px 0; background: rgba(0,255,65,0.02);">
+                <div id="visualizer" style="display:flex; gap:3px; justify-content:center; align-items:flex-end; height:40px; margin-bottom:12px;">
+                    <!-- bars generated by JS -->
+                </div>
+                <div style="color:var(--green-dim); font-size:13px; margin-bottom:12px;">STREAM MODE: ACTIVE</div>
+                <button onclick="window.open('https://www.youtube.com/@Noutzk/playlists', '_blank')"
+                    style="background: transparent; border: 1px solid var(--green); color: var(--green);
+                           padding: 10px 28px; font-family: 'VT323', monospace; font-size: 20px;
+                           cursor: pointer; letter-spacing: 2px; transition: 0.2s;
+                           box-shadow: 0 0 10px rgba(0,255,65,0.2);"
+                    onmouseover="this.style.background='var(--green)'; this.style.color='#000'; this.style.boxShadow='0 0 20px rgba(0,255,65,0.6)'"
+                    onmouseout="this.style.background='transparent'; this.style.color='var(--green)'; this.style.boxShadow='0 0 10px rgba(0,255,65,0.2)'">
+                    ▶ START_STREAMING.exe
+                </button>
+            </div>
+        </div>
+        <div class="win-statusbar">
+            <span class="status-item">CODEC: MP3/FLAC</span>
+            <span>LATENCY: 12ms</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ CONTACT WINDOW ═══════════════ -->
+    <div id="win-contact" class="window" style="left:240px; top:100px;">
+        <div class="window-header" onmousedown="dragWindow(event, 'win-contact')">
+            <div class="window-title-area">
+                <img class="window-icon-sm" src="https://cdn-icons-png.flaticon.com/512/542/542638.png">
+                <span>CONTACT_PROTOCOL.txt</span>
+            </div>
+            <div class="win-controls">
+                <div class="win-btn win-btn-min">─</div>
+                <div class="win-btn win-btn-max">□</div>
+                <div class="win-btn win-btn-close" onclick="closeWindow('win-contact')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <p class="prompt-green">INIT CONTACT PROTOCOL<span class="blinking-cursor"></span></p>
+            <br>
+            <p style="color:var(--amber);">// SECURE CHANNELS AVAILABLE:</p>
+            <br>
+            <p>📡 INSTAGRAM:
+                <a href="https://www.instagram.com/noutzk" target="_blank">@Noutzk</a>
+            </p>
+            <br>
+            <p>📧 MAIL:
+                <a href="mailto:contato.noutz@gmail.com">contato.noutz@gmail.com</a>
+            </p>
+            <hr>
+            <p style="color:var(--green-dim); font-size:13px;">
+                // All transmissions encrypted<br>
+                // Response time: 24-48h<br>
+                // ¥UNG $CUD€RI Ø$ — 2026
+            </p>
+        </div>
+        <div class="win-statusbar">
+            <span class="status-item">ENCRYPT: ON</span>
+            <span>PING: 8ms</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ TERMINAL WINDOW ═══════════════ -->
+    <div id="win-terminal" class="window" style="left:300px; top:60px; min-width:460px;">
+        <div class="window-header" onmousedown="dragWindow(event, 'win-terminal')" style="background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);">
+            <div class="window-title-area">
+                <img class="window-icon-sm" src="https://cdn-icons-png.flaticon.com/512/1684/1684375.png">
+                <span>C:\WINDOWS\system32\cmd.exe</span>
+            </div>
+            <div class="win-controls">
+                <div class="win-btn win-btn-min" style="background:linear-gradient(180deg,#555,#333)">─</div>
+                <div class="win-btn win-btn-max" style="background:linear-gradient(180deg,#555,#333)">□</div>
+                <div class="win-btn win-btn-close" onclick="closeWindow('win-terminal')">✕</div>
+            </div>
+        </div>
+        <div class="window-content" style="font-size:14px; padding:10px; background:#0c0c0c; color:#cccccc; font-family:'Courier New',monospace;">
+            <div id="terminal-output" style="min-height:200px; color: #ccc;"></div>
+            <div style="display:flex; align-items:center; margin-top:8px;">
+                <span style="color:var(--green); white-space:nowrap;">C:\HACK&gt; </span>
+                <input id="terminal-input" type="text" autocomplete="off" spellcheck="false"
+                    style="flex:1; background:transparent; border:none; outline:none;
+                           color:#ccc; font-family:'Courier New',monospace; font-size:14px;
+                           caret-color: var(--green);"
+                    placeholder="type help"
+                    onkeydown="handleTerminalInput(event)">
+            </div>
+        </div>
+        <div class="win-statusbar">
+            <span class="status-item">cmd.exe</span>
+            <span class="status-item">PROC: 0x4A2F</span>
+            <span>COLS: 80 ROWS: 25</span>
+        </div>
+    </div>
+
+</div><!-- /desktop -->
+
+<!-- TASKBAR -->
+<div id="taskbar">
+    <button id="start-button" onclick="toggleStartMenu()">
+        <span style="font-size:16px;">🖥</span> ¥UNG $CUD€RI Ø$
+    </button>
+    <div class="taskbar-divider"></div>
+    <div class="taskbar-tasks" id="taskbar-tasks"></div>
+    <div id="systray">
+        <img class="tray-icon" src="https://cdn-icons-png.flaticon.com/512/126/126308.png" title="Network: Connected">
+        <img class="tray-icon" src="https://cdn-icons-png.flaticon.com/512/3159/3159310.png" title="Sound: Active">
+        <div>
+            <div id="clock-display">00:00</div>
+        </div>
+    </div>
+</div>
+
+<!-- START MENU -->
+<div id="start-menu">
+    <div class="start-header">
+        <div class="start-avatar">◈</div>
+        <div>
+            <div class="start-username">¥UNG $CUD€RI Ø$</div>
+            <div style="color:var(--green-dim); font-size:13px; font-family:'VT323'">root@hackos</div>
+        </div>
+    </div>
+    <div class="start-items">
+        <div class="start-item" onclick="openWindow('win-albums'); toggleStartMenu()">
+            <img src="https://cdn-icons-png.flaticon.com/512/3312/3312678.png"> ALBUMS.exe
+        </div>
+        <div class="start-item" onclick="openWindow('win-social'); toggleStartMenu()">
+            <img src="https://cdn-icons-png.flaticon.com/512/625/625154.png"> LINKS.url
+        </div>
+        <div class="start-item" onclick="openWindow('win-beats'); toggleStartMenu()">
+            <img src="https://cdn-icons-png.flaticon.com/512/3039/3039401.png"> BEATS.bat
+        </div>
+        <div class="start-item" onclick="openWindow('win-contact'); toggleStartMenu()">
+            <img src="https://cdn-icons-png.flaticon.com/512/542/542638.png"> CONTACT.txt
+        </div>
+        <div class="start-item" onclick="openWindow('win-terminal'); toggleStartMenu()">
+            <img src="https://cdn-icons-png.flaticon.com/512/1684/1684375.png"> CMD.exe
+        </div>
+        <hr class="start-sep">
+        <div class="start-item" style="color:var(--red);" onclick="location.reload()">
+            <span style="font-size:20px;">⏻</span> REBOOT_SYSTEM
+        </div>
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// BOOT SEQUENCE
+// ═══════════════════════════════════════
+const bootMessages = [
+    { text: 'BIOS POST ... OK', delay: 0, cls: 'ok-text' },
+    { text: 'Detecting CPU: HACK_CORE i9-XTREME ... OK', delay: 200, cls: 'ok-text' },
+    { text: 'Memory test: 16384MB DDR4 ... OK', delay: 400, cls: 'ok-text' },
+    { text: 'Loading HACK_OS kernel ...', delay: 650, cls: '' },
+    { text: 'Mounting encrypted volumes ...', delay: 900, cls: '' },
+    { text: 'WARNING: Anomalous process detected (pid 4442)', delay: 1100, cls: 'warn-text' },
+    { text: 'Bypassing NTFS security ... OK', delay: 1300, cls: 'ok-text' },
+    { text: 'Loading network stack [TOR+VPN] ... OK', delay: 1500, cls: 'ok-text' },
+    { text: 'ERROR: Firewall breach at 0x00FEED ... PATCHED', delay: 1700, cls: 'err-text' },
+    { text: 'Injecting rootkit module ... OK', delay: 1900, cls: 'ok-text' },
+    { text: 'Starting GUI subsystem ...', delay: 2100, cls: '' },
+    { text: 'Welcome to HACK_OS XP [Version 5.1.2600] — ¥UNG $CUD€RI Ø$', delay: 2400, cls: 'ok-text' },
+];
+
+const bootLog = document.getElementById('boot-log');
+const bootScreen = document.getElementById('boot-screen');
+const bootBarContainer = document.getElementById('boot-bar-container');
+const bootBar = document.getElementById('boot-bar');
+const bootStatus = document.getElementById('boot-status');
+
+bootMessages.forEach(({ text, delay, cls }) => {
+    setTimeout(() => {
+        const div = document.createElement('div');
+        div.className = `boot-line ${cls}`;
+        div.textContent = text;
+        bootLog.appendChild(div);
+        requestAnimationFrame(() => { div.classList.add('visible'); });
+        bootLog.scrollTop = bootLog.scrollHeight;
+    }, delay);
+});
+
+// Progress bar
+setTimeout(() => {
+    bootBarContainer.style.display = 'block';
+    bootStatus.textContent = 'Loading HACK_XP_SP2...';
+    let w = 0;
+    const iv = setInterval(() => {
+        w += Math.random() * 8;
+        if (w >= 100) { w = 100; clearInterval(iv); }
+        bootBar.style.width = w + '%';
+    }, 80);
+}, 2600);
+
+setTimeout(() => {
+    bootStatus.textContent = 'ACCESS GRANTED. Starting desktop...';
+}, 3600);
+
+setTimeout(() => {
+    bootScreen.classList.add('fadeout');
+    setTimeout(() => { bootScreen.style.display = 'none'; }, 1000);
+}, 4200);
+
+// ═══════════════════════════════════════
+// MATRIX RAIN
+// ═══════════════════════════════════════
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$¥€Ø#@!%^&*()_+-=[]{}|;:<>?/\\ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ';
+const fontSize = 14;
+let cols = [];
+
+function initMatrix() {
+    const numCols = Math.floor(canvas.width / fontSize);
+    cols = Array(numCols).fill(1);
+}
+initMatrix();
+
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < cols.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        const bright = Math.random() > 0.95;
+        ctx.fillStyle = bright ? '#ffffff' : '#00ff41';
+        ctx.font = fontSize + 'px monospace';
+        ctx.fillText(char, i * fontSize, cols[i] * fontSize);
+        if (cols[i] * fontSize > canvas.height && Math.random() > 0.975) cols[i] = 0;
+        cols[i]++;
+    }
+}
+setInterval(drawMatrix, 50);
+
+// ═══════════════════════════════════════
+// WINDOWS
+// ═══════════════════════════════════════
+let zCounter = 20;
+
+function openWindow(id) {
+    const win = document.getElementById(id);
+    win.style.display = 'block';
+    win.style.zIndex = ++zCounter;
+    // Center if no position set
+    if (!win.style.left) {
+        win.style.left = (Math.random() * 200 + 100) + 'px';
+        win.style.top = (Math.random() * 150 + 60) + 'px';
+    }
+    updateTaskbar();
+}
+
+function closeWindow(id) {
+    document.getElementById(id).style.display = 'none';
+    updateTaskbar();
+}
+
+// Drag
+function dragWindow(e, id) {
+    const win = document.getElementById(id);
+    win.style.zIndex = ++zCounter;
+    const startX = e.clientX - win.offsetLeft;
+    const startY = e.clientY - win.offsetTop;
+
+    function move(ev) {
+        win.style.left = (ev.clientX - startX) + 'px';
+        win.style.top  = (ev.clientY - startY) + 'px';
+    }
+    function up() {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+    }
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+}
+
+// Focus on click
+document.querySelectorAll('.window').forEach(win => {
+    win.addEventListener('mousedown', () => { win.style.zIndex = ++zCounter; });
+});
+
+// Taskbar
+function updateTaskbar() {
+    const tasks = document.getElementById('taskbar-tasks');
+    tasks.innerHTML = '';
+    const labels = {
+        'win-albums': '🎵 ALBUMS',
+        'win-social': '🔗 LINKS',
+        'win-beats':  '🎧 BEATS',
+        'win-contact':'📧 CONTACT',
+        'win-terminal':'⬛ CMD',
+    };
+    document.querySelectorAll('.window').forEach(win => {
+        if (win.style.display !== 'none') {
+            const btn = document.createElement('div');
+            btn.className = 'taskbar-item';
+            btn.textContent = labels[win.id] || win.id;
+            btn.onclick = () => { win.style.zIndex = ++zCounter; };
+            tasks.appendChild(btn);
+        }
+    });
+}
+
+// ═══════════════════════════════════════
+// START MENU
+// ═══════════════════════════════════════
+function toggleStartMenu() {
+    document.getElementById('start-menu').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+    if (!e.target.closest('#start-menu') && !e.target.closest('#start-button')) {
+        document.getElementById('start-menu').classList.remove('open');
+    }
+});
+
+// ═══════════════════════════════════════
+// CLOCK + HUD
+// ═══════════════════════════════════════
+let uptimeSec = 0;
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function updateClock() {
+    const now = new Date();
+    document.getElementById('clock-display').textContent =
+        pad(now.getHours()) + ':' + pad(now.getMinutes());
+    document.getElementById('hud-date').textContent =
+        now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+    uptimeSec++;
+    const h = Math.floor(uptimeSec/3600), m = Math.floor(uptimeSec/60)%60, s = uptimeSec%60;
+    document.getElementById('hud-uptime').textContent =
+        'UPTIME: ' + pad(h) + ':' + pad(m) + ':' + pad(s);
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ═══════════════════════════════════════
+// BEATS VISUALIZER
+// ═══════════════════════════════════════
+const viz = document.getElementById('visualizer');
+const barCount = 20;
+for (let i = 0; i < barCount; i++) {
+    const bar = document.createElement('div');
+    bar.style.cssText = `width:8px; background: linear-gradient(#00ff41, #004400);
+        border-radius: 2px; flex-shrink:0; transition: height 0.15s;`;
+    bar.style.height = '4px';
+    viz.appendChild(bar);
+}
+function animateViz() {
+    viz.querySelectorAll('div').forEach(bar => {
+        bar.style.height = (Math.random() * 36 + 4) + 'px';
+        bar.style.opacity = 0.5 + Math.random() * 0.5;
+    });
+}
+setInterval(animateViz, 120);
+
+// ═══════════════════════════════════════
+// TERMINAL
+// ═══════════════════════════════════════
+const termOutput = document.getElementById('terminal-output');
+let termHistory = [];
+let histIdx = -1;
+
+const termCommands = {
+    help: () => [
+        '<span style="color:#00ff41">Available commands:</span>',
+        '  help       — this menu',
+        '  whoami     — show user',
+        '  ls         — list files',
+        '  albums     — open albums window',
+        '  social     — open social links',
+        '  beats      — open beats player',
+        '  contact    — open contact info',
+        '  clear      — clear terminal',
+        '  matrix     — toggle matrix rain',
+        '  hack       — ...',
+    ],
+    whoami: () => ['root@hack — ¥UNG $CUD€RI Ø$', 'UID=0(root) GID=0(root)'],
+    ls: () => [
+        '<span style="color:#00aaff">drwxr-xr-x</span>  ALBUMS/',
+        '<span style="color:#00aaff">drwxr-xr-x</span>  BEATS/',
+        '<span style="color:#00ff41">-rwxr--r--</span>  contact.txt',
+        '<span style="color:#00ff41">-rwxr--r--</span>  social.url',
+        '<span style="color:#ffb000">-rw-------</span>  LUCK_OR_DICE_II.enc',
+    ],
+    albums: () => { openWindow('win-albums'); return ['> Opening ALBUMS.exe...']; },
+    social: () => { openWindow('win-social'); return ['> Opening LINKS.url...']; },
+    beats:  () => { openWindow('win-beats');  return ['> Loading BEATS.bat...']; },
+    contact:() => { openWindow('win-contact');return ['> Reading CONTACT.txt...']; },
+    clear:  () => { termOutput.innerHTML = ''; return []; },
+    matrix: () => {
+        const c = document.getElementById('matrix-canvas');
+        c.style.opacity = c.style.opacity === '0' ? '0.07' : '0';
+        return ['Matrix rain: ' + (c.style.opacity === '0' ? 'OFF' : 'ON')];
+    },
+    hack: () => [
+        '<span style="color:#ff2020">INITIATING SEQUENCE...</span>',
+        'Scanning target... 192.168.1.1',
+        'Port 22 OPEN — SSH detected',
+        'Brute force: [████████░░] 84%',
+        '<span style="color:#ffb000">ACCESS GRANTED — root shell established</span>',
+        '<span style="color:#00ff41">¥UNG $CUD€RI Ø$ — SYSTEM OWNED</span>',
+    ],
+};
+
+function termWrite(lines) {
+    lines.forEach(line => {
+        const div = document.createElement('div');
+        div.innerHTML = line;
+        div.style.marginBottom = '2px';
+        termOutput.appendChild(div);
+    });
+    termOutput.scrollTop = termOutput.scrollHeight;
+}
+
+function handleTerminalInput(e) {
+    const input = document.getElementById('terminal-input');
+    if (e.key === 'ArrowUp') {
+        if (histIdx < termHistory.length - 1) histIdx++;
+        input.value = termHistory[termHistory.length - 1 - histIdx] || '';
+        return;
+    }
+    if (e.key === 'ArrowDown') {
+        if (histIdx > 0) histIdx--;
+        input.value = termHistory[termHistory.length - 1 - histIdx] || '';
+        return;
+    }
+    if (e.key !== 'Enter') return;
+
+    const cmd = input.value.trim().toLowerCase();
+    if (!cmd) return;
+
+    termHistory.push(cmd);
+    histIdx = -1;
+
+    termWrite([`<span style="color:#00ff41">C:\\HACK&gt;</span> ${cmd}`]);
+
+    if (termCommands[cmd]) {
+        termWrite(termCommands[cmd]());
+    } else {
+        termWrite([`<span style="color:#ff2020">'${cmd}' is not recognized. Type 'help'.</span>`]);
+    }
+
+    input.value = '';
+}
+
+// Auto-type boot message in terminal
+setTimeout(() => {
+    termWrite([
+        'Microsoft Windows XP [Version 5.1.2600]',
+        '<span style="color:#00ff41">(C) ¥UNG $CUD€RI Ø$ Corp. All rights reserved.</span>',
+        '',
+        'Type <span style="color:#ffb000">help</span> for available commands.',
+        '',
+    ]);
+}, 4500);
+
+// Glitch effect on random intervals
+setInterval(() => {
+    const wins = document.querySelectorAll('.window[style*="block"]');
+    wins.forEach(w => {
+        if (Math.random() > 0.97) {
+            const orig = w.style.left;
+            w.style.left = (parseFloat(orig) + (Math.random()-0.5)*4) + 'px';
+            setTimeout(() => { w.style.left = orig; }, 80);
+        }
+    });
+}, 200);
+</script>
+
 </body>
 </html>
